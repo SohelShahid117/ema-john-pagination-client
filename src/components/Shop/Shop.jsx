@@ -17,6 +17,22 @@ const Shop = () => {
   const { count } = useLoaderData();
   console.log(count);
 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  // const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const numberOfPages = Math.ceil(count / itemsPerPage);
+  console.log(numberOfPages);
+
+  // let pages = [];
+  // for (let i = 0; i < numberOfPages; i++) {
+  //   pages.push(i);
+  // }
+  // console.log(pages);
+
+  const pages = [...Array(numberOfPages).keys()];
+  console.log(pages);
+
   useEffect(() => {
     fetch("http://localhost:5000/products")
       .then((res) => res.json())
@@ -67,6 +83,30 @@ const Shop = () => {
     setCart([]);
     deleteShoppingCart();
   };
+  const handleChangeItemsperPage = (e) => {
+    console.log(e.target.value);
+    const val = parseInt(e.target.value);
+    setItemsPerPage(val);
+    setCurrentPage(0);
+  };
+
+  const handeleCurrentPage = (page) => {
+    console.log(page);
+    setCurrentPage(page);
+  };
+  const handlePreviousPage = (e) => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const handleNextPage = (e) => {
+    // if (currentPage < numberOfPages - 1) {
+    //   setCurrentPage(currentPage + 1);
+    // }
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <div className="shop-container">
@@ -85,6 +125,29 @@ const Shop = () => {
             <button className="btn-proceed">Review Order</button>
           </Link>
         </Cart>
+      </div>
+      <div className="pagination">
+        <p>Current Page : {currentPage}</p>
+        <button onClick={handlePreviousPage}>Prev</button>
+        {pages.map((page, i) => (
+          <button
+            className={currentPage === page && `selected`}
+            key={i}
+            onClick={() => {
+              handeleCurrentPage(page);
+            }}
+          >
+            {page}
+          </button>
+        ))}
+        <button onClick={handleNextPage}>Next</button>
+        <select value={itemsPerPage} onChange={handleChangeItemsperPage}>
+          {/* <option value={10}>10</option> */}
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
       </div>
     </div>
   );
@@ -111,3 +174,5 @@ useEffect(() => {
   // and every time dep1 or dep2 changes
 }, [dep1, dep2]);
 */
+
+//62-5 (Interesting) Set current page state and next prev button
