@@ -134,7 +134,7 @@ const Shop = () => {
         <button onClick={handlePreviousPage}>Prev</button>
         {pages.map((page, i) => (
           <button
-            className={currentPage === page && `selected`}
+            className={currentPage === page ? `selected` : undefined}
             key={i}
             onClick={() => {
               handeleCurrentPage(page);
@@ -145,7 +145,6 @@ const Shop = () => {
         ))}
         <button onClick={handleNextPage}>Next</button>
         <select value={itemsPerPage} onChange={handleChangeItemsperPage}>
-          {/* <option value={10}>10</option> */}
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
